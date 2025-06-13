@@ -15,5 +15,5 @@
 
   This solver can solve all the words in the input data in 6 or less guesses, with an average of 3.74 guesses. 
   the [optimal algorithm](https://sonorouschocolate.com/notes/index.php?title=The_best_strategies_for_Wordle)  can solve everything in 5 or less guesses, with an average of 3.42 guesses. 
-  The difference is, this algorithm runs nearly instantly, except for the first guess which can be cached, which takes ~1 second, whereas the optimal algorithm takes 1~2 days to compute (which can be cached and turned into a strategy file)
+  The difference is, this algorithm runs nearly instantly, except for the first guess which can be cached, which takes \~1 second, whereas the optimal algorithm takes 1~2 days to compute (which can be cached and turned into a strategy file)
   
