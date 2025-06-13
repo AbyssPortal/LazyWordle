@@ -145,11 +145,11 @@ int play_wordle(Word hidden_word, Word first_guess)
 
         apply_guess(partition, best_guess, find_colors(hidden_word, best_guess));
 
-        std::cout << "Remaining get_words(): " << partition.size() << std::endl;
+        std::cout << "Remaining words: " << partition.size() << std::endl;
 
         if (partition.empty())
         {
-            std::cout << "No more possible get_results() left!" << std::endl;
+            std::cout << "No more possible results left!" << std::endl;
             return 10; // Failure
         }
     }
@@ -184,11 +184,11 @@ int cheat_wordle(Word first_guess)
 
         apply_guess(partition, best_guess, guess_colors);
 
-        std::cout << "Remaining get_words(): " << partition.size() << std::endl;
+        std::cout << "Remaining words: " << partition.size() << std::endl;
 
         if (partition.empty())
         {
-            std::cout << "No more possible get_results() left!" << std::endl;
+            std::cout << "No more possible results left!" << std::endl;
             return 10; // Failure
         }
     }
