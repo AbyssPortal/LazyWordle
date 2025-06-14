@@ -7,12 +7,15 @@
 #include <algorithm>
 #include <cstring>
 #include <iomanip>
+#include "utils.hpp"
 #include "wordle.hpp"
 #include "wordle_solver.hpp"
 
-int play_wordle(Word hidden_word, Word first_guess);
+int bot_play_wordle(Word hidden_word, Word first_guess);
 
 int cheat_wordle(Word first_guess);
+
+int play_wordle(Word hidden_word);
 
 const char *best_first_guess_location = "best_first_guess.txt";
 
@@ -53,6 +56,7 @@ int main(int argc, char **argv)
         std::cerr << "Usage 2: " << argv[0] << " solve" << " [hidden]" << std::endl;
         std::cerr << "Usage 3: " << argv[0] << " cheat" << std::endl;
         std::cerr << "Usage 4: " << argv[0] << " recalc_first" << std::endl;
+        std::cerr << "Usage 5: " << argv[0] << " play" << std::endl;
 
         return 1;
     }
@@ -79,7 +83,7 @@ int main(int argc, char **argv)
                 }
                 std::cout << "Hidden word: " << hidden_word << std::endl;
 
-                int guesses = play_wordle(hidden_word, first_guess);
+                int guesses = bot_play_wordle(hidden_word, first_guess);
 
                 total_guesses += guesses;
                 total_games++;
@@ -99,7 +103,7 @@ int main(int argc, char **argv)
                 return 1;
             }
             Word hidden_word = create_word_from_char_ptr(argv[2]);
-            play_wordle(hidden_word, first_guess);
+            bot_play_wordle(hidden_word, first_guess);
         }
         else if (std::strcmp(argv[1], "cheat") == 0)
         {
@@ -116,6 +120,12 @@ int main(int argc, char **argv)
             outfile << first_guess << std::endl;
             outfile.close();
         }
+        else if (std::strcmp(argv[1], "play") == 0)
+        {
+            srand(time(nullptr));
+
+            play_wordle(get_results()[rand() % get_results().size()]);
+        }
         else
         {
             std::cerr << "Unknown command: " << argv[1] << std::endl;
@@ -124,7 +134,60 @@ int main(int argc, char **argv)
     }
 }
 
-int play_wordle(Word hidden_word, Word first_guess)
+int play_wordle(Word hidden_word)
+{
+    for (int i = 0; i < 6; i++)
+    {
+        std::cout << "Guess #" << i + 1 << ": ";
+        std::string guess_str = "";
+        std::cin >> guess_str;
+
+        while (guess_str.size() != WORD_SIZE)
+        {
+            std::cout << "Invalid guess length. Please enter a 5-letter word." << std::endl;
+            std::cin >> guess_str;
+        }
+
+        Word guess = create_word_from_char_ptr(guess_str.c_str());
+
+        uint colors = find_colors(hidden_word, guess);
+        for (int j = WORD_SIZE - 1; j >= 0; j--)
+        {
+            switch (colors / pow(3, j))
+            {
+            case 0:
+            {
+                std::cout << guess[WORD_SIZE - j - 1]; // Gray
+            }
+            break;
+            case 1:
+            {
+                print_color(std::cout, guess[WORD_SIZE - j - 1], "33"); // Yellow
+            }
+            break;
+            case 2:
+            {
+                print_color(std::cout, guess[WORD_SIZE - j - 1], "32"); // Green
+            }
+            break;
+            }
+            colors %= pow(3,j);
+        }
+        std::cout << std::endl;
+        if (guess == hidden_word)
+        {
+            std::cout << "Congratulations! You've guessed the word!" << std::endl;
+            return i + 1;
+        }
+    }
+
+    std::cout << "Sorry, you've used all your guesses. The word was: " << hidden_word << std::endl;
+
+
+    return 6;
+}
+
+int bot_play_wordle(Word hidden_word, Word first_guess)
 {
     std::vector<Word> partition = get_results();
     for (int i = 0; i < 10; i++)
