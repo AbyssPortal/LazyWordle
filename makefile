@@ -15,16 +15,22 @@ objs/lazy_wordle.o: lazy_wordle.cpp wordle.hpp utils.hpp wordle_solver.hpp
 	$(CC) $(CFLAGS) -c lazy_wordle.cpp -o objs/lazy_wordle.o
 
 objs/wordle.o: wordle.cpp wordle.hpp utils.hpp
+	mkdir -p objs
 	$(CC) $(CFLAGS) -c wordle.cpp -o objs/wordle.o
 
 objs/utils.o: utils.cpp utils.hpp
+	mkdir -p objs
+
 	$(CC) $(CFLAGS) -c utils.cpp -o objs/utils.o
 
 objs/wordle_solver.o: wordle_solver.cpp wordle_solver.hpp wordle.hpp utils.hpp
+	mkdir -p objs
 	$(CC) $(CFLAGS) -c wordle_solver.cpp -o objs/wordle_solver.o
+
 objs/words.o: words.txt
 	mkdir -p objs
 	objcopy --input binary --output elf64-x86-64 --binary-architecture i386 words.txt objs/words.o 
+
 objs/results.o: results.txt
 	mkdir -p objs
 	objcopy --input binary --output elf64-x86-64 --binary-architecture i386 results.txt objs/results.o 
