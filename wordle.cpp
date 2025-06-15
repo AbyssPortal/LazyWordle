@@ -52,49 +52,28 @@ void wordle_setup()
 
 coloring_t find_colors(Word result, Word guess)
 {
-    bool used[WORD_SIZE] = {false};
-    bool green[WORD_SIZE] = {false};
-    bool yellow[WORD_SIZE] = {false};
-    for (size_t i = 0; i < WORD_SIZE; ++i)
-    {
-
-        if (guess[i] == result[i])
-        {
-            green[i] = true;
-            used[i] = true;
-        }
-    }
-    for (size_t i = 0; i < WORD_SIZE; ++i)
-    {
-        if (green[i])
-            continue;
-        for (size_t j = 0; j < WORD_SIZE; ++j)
-        {
-            if (used[j])
-                continue;
-
-            if (guess[i] == result[j])
-            {
-                yellow[i] = true;
-                used[j] = true;
-                break;
-            }
-        }
-    }
-
     coloring_t word_colors = 0;
     for (size_t i = 0; i < WORD_SIZE; ++i)
     {
-        word_colors *= 3;
-        if (green[i])
+        word_colors *= 3; // Shift left by 1 base-3 digit
+
+        if (guess[i] == result[i])
         {
+            result[i] = '#'; // Mark as matched
             word_colors += 2;
-        }
-        else if (yellow[i])
-        {
-            word_colors += 1;
+        } else {
+            for (uint j = 0; j < WORD_SIZE; ++j)
+            {
+                if (guess[i] == result[j])
+                {
+                    word_colors += 1;
+                    result[j] = '#'; // Mark as matched
+                    break; // Found a match, no need to check further
+                }
+            }
         }
     }
+   
 
     if (word_colors >= COLORINGS_COUNT)
     {
