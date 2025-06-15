@@ -150,7 +150,7 @@ int play_wordle(Word hidden_word)
 
         Word guess = create_word_from_char_ptr(guess_str.c_str());
 
-        uint colors = find_colors(hidden_word, guess);
+        coloring_t colors = find_colors(hidden_word, guess);
         for (int j = WORD_SIZE - 1; j >= 0; j--)
         {
             switch (colors / pow(3, j))
@@ -234,7 +234,7 @@ int cheat_wordle(Word first_guess)
         std::cout << "Guess #" << i + 1 << ": " << best_guess << std::endl;
 
         std::cout << "What colors did you get? (0 for gray, 1 for yellow, 2 for green): ";
-        uint guess_colors = -1;
+        coloring_t guess_colors = -1;
         while (guess_colors >= COLORINGS_COUNT)
         {
             guess_colors = get_coloring_from_input(std::cin);

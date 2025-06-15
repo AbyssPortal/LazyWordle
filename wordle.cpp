@@ -50,7 +50,7 @@ void wordle_setup()
     done_setup = true;
 }
 
-uint find_colors(Word result, Word guess)
+coloring_t find_colors(Word result, Word guess)
 {
     bool used[WORD_SIZE] = {false};
     bool green[WORD_SIZE] = {false};
@@ -82,7 +82,7 @@ uint find_colors(Word result, Word guess)
         }
     }
 
-    uint word_colors = 0;
+    coloring_t word_colors = 0;
     for (size_t i = 0; i < WORD_SIZE; ++i)
     {
         word_colors *= 3;
@@ -107,8 +107,9 @@ uint find_colors(Word result, Word guess)
 }
 
 
-int get_coloring_from_input(std::istream &is)
+coloring_t get_coloring_from_input(std::istream &is)
 {
+    
     std::string input;
     is >> input;
 
@@ -118,7 +119,7 @@ int get_coloring_from_input(std::istream &is)
         return -1; // Error code for invalid input
     }
 
-    int color_value = 0;
+    coloring_t color_value = 0;
     for (size_t i = 0; i < WORD_SIZE; ++i)
     {
         char c = input[i];

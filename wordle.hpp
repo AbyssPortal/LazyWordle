@@ -13,6 +13,11 @@ constexpr uint WORD_SIZE = 5; // Wordle words are 5 letters long
 constexpr uint COLORINGS_COUNT = pow(3, WORD_SIZE);
 typedef std::array<char, WORD_SIZE> Word;
 
+typedef std::conditional_t<log(2, COLORINGS_COUNT) <=  8, u_int8_t,
+                    std::conditional_t<log(2, COLORINGS_COUNT) <= 16, u_int16_t,
+                    std::conditional_t<log(2, COLORINGS_COUNT) <= 32, u_int32_t,
+                    u_int64_t>>> coloring_t;
+
 extern char _binary_words_txt_start;
 extern char _binary_words_txt_end;
 extern char _binary_results_txt_start;
@@ -29,6 +34,6 @@ Word create_word_from_char_ptr(const char *word_str);
 
 std::ostream &operator<<(std::ostream &os, const Word &word);
 
-uint find_colors(Word result, Word guess);
+coloring_t find_colors(Word result, Word guess);
 
-int get_coloring_from_input(std::istream &is);
+coloring_t get_coloring_from_input(std::istream &is);

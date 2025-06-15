@@ -27,4 +27,15 @@ constexpr uint pow(uint base, uint exp)
     return result;
 }
 
+constexpr uint log(uint base, uint value)
+{
+    uint result = 0;
+    while (value > 1)
+    {
+        value /= base;
+        ++result;
+    }
+    return result;
+}
+
 

@@ -35,7 +35,7 @@ Word find_best_guess(const std::vector<Word> &partition)
     return best_guess;
 }
 
-void apply_guess(std::vector<Word> &partition, Word guess, uint guess_colors)
+void apply_guess(std::vector<Word> &partition, Word guess, coloring_t guess_colors)
 {
     std::vector<Word> new_partition;
     for (Word result : partition)
