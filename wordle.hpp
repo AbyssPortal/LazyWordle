@@ -4,19 +4,22 @@
 #include <array>
 #include <string>
 #include <limits>
-#include "utils.hpp"
 #include <iostream>
 #include <vector>
 #include <fstream>
+#include <cstdint>
+
+#include "utils.hpp"
+
 
 constexpr uint WORD_SIZE = 5; // Wordle words are 5 letters long
 constexpr uint COLORINGS_COUNT = pow(3, WORD_SIZE);
 typedef std::array<char, WORD_SIZE> Word;
 
-typedef std::conditional_t<log(2, COLORINGS_COUNT) <=  8, u_int8_t,
-                    std::conditional_t<log(2, COLORINGS_COUNT) <= 16, u_int16_t,
-                    std::conditional_t<log(2, COLORINGS_COUNT) <= 32, u_int32_t,
-                    u_int64_t>>> coloring_t;
+typedef std::conditional_t<log(2, COLORINGS_COUNT) <=  8, uint_fast8_t,
+                    std::conditional_t<log(2, COLORINGS_COUNT) <= 16, uint_fast16_t,
+                    std::conditional_t<log(2, COLORINGS_COUNT) <= 32, uint_fast32_t,
+                    uint_fast64_t >>> coloring_t;
 
 extern char _binary_words_txt_start;
 extern char _binary_words_txt_end;
