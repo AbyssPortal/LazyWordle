@@ -74,14 +74,15 @@ coloring_t find_colors(Word result, Word guess)
         }
     }
    
-
+    /*
     if (word_colors >= COLORINGS_COUNT)
     {
         std::cerr << COLORINGS_COUNT << std::endl;
         std::cerr << "Error: Color value exceeds expected range." << std::endl;
         std::cerr << "Result: " << result << ", Guess: " << guess << std::endl;
     }
-
+    */
+   
     return word_colors;
 }
 

@@ -17,26 +17,33 @@ int cheat_wordle(Word first_guess);
 
 int play_wordle(Word hidden_word);
 
+int manual_partition();
+
 const char *best_first_guess_location = "best_first_guess.txt";
 
 inline Word get_best_first_guess()
 {
+
+    static Word res = {' ', ' ', ' ', ' ', ' '};
+    if (res != Word{' ', ' ', ' ', ' ', ' '})
+    {
+        return res; // Return cached result if available
+    }
     std::ifstream infile(best_first_guess_location);
-    Word best_first_guess;
     if (infile)
     {
         std::string guess;
         infile >> guess;
         if (guess.size() == 5)
         {
-            best_first_guess = create_word_from_char_ptr(guess.c_str());
-            return best_first_guess;
+            res = create_word_from_char_ptr(guess.c_str());
+            return res;
         }
     }
-    best_first_guess = find_best_guess(get_results());
+    res = find_best_guess(get_results());
     std::ofstream outfile(best_first_guess_location);
-    outfile << best_first_guess << std::endl;
-    return best_first_guess;
+    outfile << res << std::endl;
+    return res;
 }
 
 int main(int argc, char **argv)
@@ -57,6 +64,7 @@ int main(int argc, char **argv)
         std::cerr << "Usage 3: " << argv[0] << " cheat" << std::endl;
         std::cerr << "Usage 4: " << argv[0] << " recalc_first" << std::endl;
         std::cerr << "Usage 5: " << argv[0] << " play" << std::endl;
+        std::cerr << "Usage 6: " << argv[0] << " manual_partition" << std::endl;
 
         return 1;
     }
@@ -126,12 +134,58 @@ int main(int argc, char **argv)
 
             play_wordle(get_results()[rand() % get_results().size()]);
         }
+        else if (std::strcmp(argv[1], "manual_partition") == 0)
+        {
+            manual_partition();
+        }
         else
         {
             std::cerr << "Unknown command: " << argv[1] << std::endl;
             return 1;
         }
     }
+}
+
+int manual_partition()
+{
+    std::vector<Word> partition = get_results();
+    while (true)
+    {
+        std::cout << "Enter a guess (5-letter word) or 'exit' to quit: ";
+        std::string guess_str;
+        std::cin >> guess_str;
+
+        if (guess_str == "exit")
+        {
+            break;
+        }
+
+        while (guess_str.size() != WORD_SIZE)
+        {
+            std::cout << "Invalid guess length. Please enter a 5-letter word." << std::endl;
+            std::cin >> guess_str;
+        }
+
+        Word guess = create_word_from_char_ptr(guess_str.c_str());
+        std::cout << "What colors did you get? (0 for gray, 1 for yellow, 2 for green): ";
+        coloring_t guess_colors = -1;
+        while (guess_colors >= COLORINGS_COUNT)
+        {
+            guess_colors = get_coloring_from_input(std::cin);
+        }
+
+        apply_guess(partition, guess, guess_colors);
+        std::cout << "Remaining words: " << partition.size() << std::endl;
+        if (get_y_or_n("Do you want to see the remaining words?"))
+        {
+            std::cout << "Remaining words: " << std::endl;
+            for (const Word &word : partition)
+            {
+                std::cout << word << std::endl;
+            }
+        }
+    }
+    return 0;
 }
 
 int play_wordle(Word hidden_word)
@@ -171,7 +225,7 @@ int play_wordle(Word hidden_word)
             }
             break;
             }
-            colors %= pow(3,j);
+            colors %= pow(3, j);
         }
         std::cout << std::endl;
         if (guess == hidden_word)
@@ -182,7 +236,6 @@ int play_wordle(Word hidden_word)
     }
 
     std::cout << "Sorry, you've used all your guesses. The word was: " << hidden_word << std::endl;
-
 
     return 6;
 }

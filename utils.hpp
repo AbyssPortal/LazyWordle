@@ -38,4 +38,4 @@ constexpr uint log(uint base, uint value)
     return result;
 }
 
-
+bool get_y_or_n(const std::string &prompt);

@@ -38,3 +38,25 @@ char to_upper(char c)
     return (c >= 'a' && c <= 'z') ? c - ('a' - 'A') : c;
 }
 
+bool get_y_or_n(const std::string &prompt)
+{
+    std::string response;
+    while (true)
+    {
+        std::cout << prompt << " (y/n): ";
+        std::cin >> response;
+        if (response == "y" || response == "Y")
+        {
+            return true;
+        }
+        else if (response == "n" || response == "N")
+        {
+            return false;
+        }
+        else
+        {
+            std::cout << "Invalid input. Please enter 'y' or 'n'." << std::endl;
+        }
+    }
+}
+
