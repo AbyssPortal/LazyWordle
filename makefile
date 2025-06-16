@@ -29,11 +29,15 @@ objs/wordle_solver.o: wordle_solver.cpp wordle_solver.hpp wordle.hpp utils.hpp
 
 objs/words.o: words.txt
 	mkdir -p objs
-	objcopy --input binary --output elf64-x86-64 --binary-architecture i386 words.txt objs/words.o 
+	objcopy --input binary --output elf64-x86-64 --binary-architecture i386 words.txt \
+	--add-section .note.GNU-stack=/dev/null --set-section-flags .note.GNU-stack=contents,noload \
+	objs/words.o
 
 objs/results.o: results.txt
 	mkdir -p objs
-	objcopy --input binary --output elf64-x86-64 --binary-architecture i386 results.txt objs/results.o 
+	objcopy --input binary --output elf64-x86-64 --binary-architecture i386 results.txt \
+	--add-section .note.GNU-stack=/dev/null --set-section-flags .note.GNU-stack=contents,noload \
+	 objs/results.o 
 
 clean:
 	rm -f objs/*.o lazy_wordle
