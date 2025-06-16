@@ -196,13 +196,26 @@ int play_wordle(Word hidden_word)
         std::string guess_str = "";
         std::cin >> guess_str;
 
-        while (guess_str.size() != WORD_SIZE)
+        Word guess;
+        while (true)
         {
-            std::cout << "Invalid guess length. Please enter a 5-letter word." << std::endl;
-            std::cin >> guess_str;
+            while (guess_str.size() != WORD_SIZE)
+            {
+                std::cout << "Invalid guess length. Please enter a 5-letter word." << std::endl;
+                std::cin >> guess_str;
+            }
+            guess = create_word_from_char_ptr(guess_str.c_str());
+            if (find(get_words().begin(), get_words().end(), guess) != get_words().end())
+            {
+                break; // Valid guess
+            }
+            else
+            {
+                std::cout << "Word not in database:" << guess << std::endl;
+                std::cin >> guess_str;
+                guess = create_word_from_char_ptr(guess_str.c_str());
+            }
         }
-
-        Word guess = create_word_from_char_ptr(guess_str.c_str());
 
         coloring_t colors = find_colors(hidden_word, guess);
         for (int j = WORD_SIZE - 1; j >= 0; j--)
